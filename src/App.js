@@ -1,25 +1,57 @@
-import logo from './logo.svg';
+
 import './App.css';
+import Instruments from './instruments';
+import React, { useState,useEffect } from 'react';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const App = () => {
+  const [instruments,setInstruments]=useState([
+    {id:0,label:"Piano",quantity:1},
+    {id:1,label:"Guitrar",quantity:2},
+    {id:2,label:"Cello",quantity:5},
+    {id:3,label:"Drums",quantity:1},
+    {id:4,label:"Saxophone",quantity:1}])
+  const [username,setUsername]=useState("")
+
+
+    useEffect(()=>{
+      let username=window.prompt("Who are you?");
+      setUsername(username)
+    },[])
+
+
+
+      const handleIncrement=(instrumentId)=>{
+      let newInstruments=[...instruments]
+      let instrument=instruments.find(instrument=>instrument.id===instrumentId)
+      instrument.quantity+=1
+      const index=instruments.indexOf(instrument)
+      newInstruments[index]=instrument
+      setInstruments(newInstruments)
+  
+  }
+  const handleDecrement=(instrumentId)=>{
+    let newInstruments=[...instruments]
+    let instrument=instruments.find(instrument=>instrument.id===instrumentId)
+    instrument.quantity-=1
+    const index=instruments.indexOf(instrument)
+    newInstruments[index]=instrument
+    setInstruments(newInstruments)
+
 }
-
+  const renderInstrumentClass=(instrumentQuantity)=>{
+      return instrumentQuantity===0?"no-more":"instrument-label"
+  } 
+  return ( <div className="App">
+  {username&&<p className="greetings">{`Welcome ${username}! Happy to see you.`}</p>}  
+  <Instruments 
+  instruments={instruments}
+  onIncrement={handleIncrement}
+  onDecrement={handleDecrement}
+  classRendering={renderInstrumentClass}/>
+</div>  );
+}
+ 
 export default App;
+
+
+
